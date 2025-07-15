@@ -1,16 +1,7 @@
 <?php
-// Process PHP logic before any output
-$output = "";
 if (isset($_GET["username"])) {
-    if (!empty($_GET["username"])) {
-        // No sanitization at all
-        $user = $_GET["username"];
-        $output = "Your name is " . $user;
-    } else {
-        $output = "Please enter a value.";
-    }
-} else {
-    $output = "Please enter a value.";
+    $user = $_GET["username"]; // No filtering or sanitization
+    echo "Your name is " . "$user";
 }
 ?>
 

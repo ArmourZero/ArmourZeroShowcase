@@ -155,7 +155,7 @@
                 The attacker sees the output of the id command, revealing the server user context.
             </p>
             <form action="CommandExec-2.php" method="GET">
-                <label>Name:</label>
+                <label>Input here:</label>
                 <input type="text" name="typeBox" value="">
                 <input type="submit" value="Submit">
             </form>
@@ -173,9 +173,7 @@
                 } else {
                     echo "Error: Invalid or empty command.";
                 }
-                if ($_GET["typeBox"] == "Trochilidae") {
-                    echo "Welldone! You did great job.";
-                }
+                
             } else {
                 echo "Please enter a value.";
             }

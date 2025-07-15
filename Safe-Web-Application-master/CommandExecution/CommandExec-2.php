@@ -190,7 +190,7 @@ http_response_code($status_code);
                 Vulnerability is fixed, the attacker failed to extract server data.
             </p>
             <form action="CommandExec-2.php" method="GET">
-                <label>Name:</label>
+                <label>Input here:</label>
                 <input type="text" name="typeBox" value="">
                 <input type="submit" value="Submit">
             </form>

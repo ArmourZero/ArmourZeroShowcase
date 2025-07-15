@@ -11,6 +11,12 @@ If you want to run this tool, first of all you need to download web server solut
 
 - For Linux after download our files first you need to open apache server and copy the files to /var/www/html
 
+# How to use
+To test how the ArmourZero scanner works, simply fork this repository and integrate it into your ArmourZero Console. You'll be able to view real-time scans of the vulnerable web application along with the identified security issues.
+
+The AI Remediations are applied on the secured version of the website, showcasing how ArmourZero AVM guides developers through fixing vulnerabilities effectively and securely.
+
+
 # ⚠️ Vulnerability 1: Command Execution
 🔍 Vulnerability Analysis
 Input Source: typeBox parameter via $_GET

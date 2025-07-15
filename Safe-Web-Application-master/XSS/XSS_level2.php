@@ -168,7 +168,7 @@
 
             </p>
             <form method="GET" action="" name="form">
-                <label>Your name:</label>
+                <label>Input here:</label>
                 <input type="text" name="username">
                 <input type="submit" name="submit" value="Submit">
             </form>

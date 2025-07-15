@@ -3,8 +3,8 @@
 $output = "";
 if (isset($_GET["username"])) {
     if (!empty($_GET["username"])) {
-        // Poor sanitization - removes only one tag and leaves the rest, still XSS vulnerable
-        $user = str_replace("<script>", "", $_GET["username"]);
+        // No sanitization at all
+        $user = $_GET["username"];
         $output = "Your name is " . $user;
     } else {
         $output = "Please enter a value.";
@@ -13,6 +13,7 @@ if (isset($_GET["username"])) {
     $output = "Please enter a value.";
 }
 ?>
+
 
 <!DOCTYPE html>
 <html>

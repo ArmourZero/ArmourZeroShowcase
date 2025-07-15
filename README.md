@@ -1,5 +1,3 @@
-# ArmourZeroShowcase
-
 # What is ArmourZeroShowcase
 ArmourZeroShowcase is an environment of vulnerable and safe website to preview ArmourZero AVM capabilities. 
 ArmourZeroShowcase includes sample of Command Execution & XSS, and showcases how ArmourZeroAVM helps identifies, assesses, and prioritises vulnerabilities. As well as its AI Remediation Features to help developers fix vulnerabilities in a short time.

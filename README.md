@@ -19,10 +19,10 @@ The AI Remediations are applied on the secured version of the website, showcasin
 
 # ⚠️ Vulnerability 1: Command Execution
 🔍 Vulnerability Analysis
-Input Source: typeBox parameter via $_GET
-Sanitization: str_replace removes characters (&&, ;, /, \)
-Flaw: Other dangerous characters like |, ||, and backticks are not filtered
-Execution: Input is passed directly to shell_exec()
+- Input Source: typeBox parameter via $_GET
+- Sanitization: str_replace removes characters (&&, ;, /, \)
+- Flaw: Other dangerous characters like |, ||, and backticks are not filtered
+- Execution: Input is passed directly to shell_exec()
 
 💥 Impact
 An attacker can execute arbitrary shell commands on the server. This could result in:
@@ -32,12 +32,13 @@ An attacker can execute arbitrary shell commands on the server. This could resul
 
 # 🐞 Vulnerability 2: Cross-Site Scripting (XSS)
 🔍 Vulnerability Analysis
-Input Source: username parameter via $_GET
-Sanitization: Only removes exact <script> string
-Flaw: Does not escape or encode output; filters are case-sensitive and incomplete
+- Input Source: username parameter via $_GET
+- Sanitization: Only removes exact <script> string
+- Flaw: Does not escape or encode output; filters are case-sensitive and incomplete
 
 💥 Impact
-This is a Reflected XSS vulnerability. An attacker can execute arbitrary JavaScript in the victim’s browser by tricking them into clicking a malicious link. Potential consequences include:
+This is a Reflected XSS vulnerability. An attacker can execute arbitrary JavaScript in the victim’s browser by tricking them into clicking a malicious link. 
+Potential consequences include:
 - Cookie theft
 - Phishing redirects
 - Keylogging

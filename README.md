@@ -11,9 +11,10 @@ If you want to run this tool, first of all you need to download web server solut
 - For Linux after download our files first you need to open apache server and copy the files to /var/www/html
 
 # How to use
-To test how the ArmourZero scanner works, simply fork this repository and integrate it into your ArmourZero Console. You'll be able to view real-time scans of the vulnerable web application along with the identified security issues.
+To test how the ArmourZero scanner works, simply fork this repository and integrate it into your ArmourZero Console. You'll be able to view real-time scans of the vulnerable web application along with the identified security issues. This is where you are able to see how ArmourZero AI Remediation generates remediation for you. 
 
 The AI Remediations are applied on the secured version of the website, showcasing how ArmourZero AVM guides developers through fixing vulnerabilities effectively and securely.
+
 
 
 # ⚠️ Vulnerability 1: Command Execution
@@ -24,6 +25,7 @@ The AI Remediations are applied on the secured version of the website, showcasin
 - Execution: Input is passed directly to shell_exec()
 
 💥 Impact
+
 An attacker can execute arbitrary shell commands on the server. This could result in:
 - Unauthorized access
 - Information disclosure
@@ -36,6 +38,7 @@ An attacker can execute arbitrary shell commands on the server. This could resul
 - Flaw: Does not escape or encode output; filters are case-sensitive and incomplete
 
 💥 Impact
+
 This is a Reflected XSS vulnerability. An attacker can execute arbitrary JavaScript in the victim’s browser by tricking them into clicking a malicious link. 
 Potential consequences include:
 - Cookie theft

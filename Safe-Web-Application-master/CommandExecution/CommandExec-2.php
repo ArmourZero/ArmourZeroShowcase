@@ -14,12 +14,8 @@ if (isset($_GET["typeBox"]) && !empty($_GET["typeBox"])) {
         // Sanitize the user input before using in the shell command
         $safe_target_escaped = escapeshellarg($safe_target);
 
-        // Execute the safe shell command
-        $command_output = shell_exec("echo Selected: " . $safe_target_escaped);
-
         // Output result safely
-        $output = "Well Done!: " . htmlspecialchars($safe_target, ENT_QUOTES, 'UTF-8');
-        $output .= "<br>Command output: <pre>" . htmlspecialchars($command_output, ENT_QUOTES, 'UTF-8') . "</pre>";
+        $output = "Well Done! Secret word is:  " . htmlspecialchars($safe_target, ENT_QUOTES, 'UTF-8');
     } else {
         $output = "Invalid input.";
     }
@@ -30,7 +26,6 @@ if (isset($_GET["typeBox"]) && !empty($_GET["typeBox"])) {
 // Set HTTP response code before any output
 http_response_code($status_code);
 ?>
-
 
 
 

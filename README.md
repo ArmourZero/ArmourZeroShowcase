@@ -1,6 +1,5 @@
 # What is ArmourZeroShowcase
-ArmourZeroShowcase is an environment of vulnerable and safe website to preview ArmourZero AVM capabilities. 
-ArmourZeroShowcase includes sample of Command Execution & XSS, and showcases how ArmourZeroAVM helps identifies, assesses, and prioritises vulnerabilities. As well as its AI Remediation Features to help developers fix vulnerabilities in a short time.
+ArmourZero Showcase is an environment of vulnerable and safe websites to preview ArmourZero AVM (Automated Vulnerability Management) capabilities. ArmourZero Showcase includes samples of common application vulnerabilities, and showcases how ArmourZero AVM helps identifies, assesses, and prioritises vulnerabilities. As well as its AI Remediation Features to help developers fix vulnerabilities effectively.
 
 # Installation Guide
 If you want to run this tool, first of all you need to download web server solution like "xampp"- you can download xampp from Xampp. After your installation;

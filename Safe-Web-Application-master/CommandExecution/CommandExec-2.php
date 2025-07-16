@@ -11,10 +11,10 @@ if (isset($_GET["typeBox"]) && !empty($_GET["typeBox"])) {
 
     // Strict validation: only allow predefined values
     if (in_array($safe_target, $allowed_values, true)) {
-        // Sanitize using escapeshellarg for safe shell usage
+        // Sanitize the user input before using in the shell command
         $safe_target_escaped = escapeshellarg($safe_target);
 
-        // Optional: simulate safe shell command execution
+        // Execute the safe shell command
         $command_output = shell_exec("echo Selected: " . $safe_target_escaped);
 
         // Output result safely
@@ -30,6 +30,8 @@ if (isset($_GET["typeBox"]) && !empty($_GET["typeBox"])) {
 // Set HTTP response code before any output
 http_response_code($status_code);
 ?>
+
+
 
 
 

@@ -7,21 +7,21 @@ $status_code = 200; // Default status code
 $allowed_values = ['Trochilidae', 'Apodidae', 'Strigidae'];
 
 if (isset($_GET["typeBox"]) && !empty($_GET["typeBox"])) {
-    $target = $_GET["typeBox"];
-    
+    $user_input = $_GET["typeBox"];
+
     // Strict validation: only allow predefined values
-    if (in_array($target, $allowed_values, true)) {
+    if (in_array($user_input, $allowed_values, true)) {
         // Sanitize the input using escapeshellarg
-        $safe_target = escapeshellarg($target);
+        $safe_target = escapeshellarg($user_input);
 
         // Execute the sanitized command
         $command_output = shell_exec($safe_target);
 
         // Display both the selected input and the result of the command
-        $output = "Selected bird family: " . $target;
-        $output .= "<br>Command output: <pre>$command_output</pre>";
+        $output = "Selected bird family: " . htmlspecialchars($user_input, ENT_QUOTES, 'UTF-8');
+        $output .= "<br>Command output: <pre>" . htmlspecialchars($command_output, ENT_QUOTES, 'UTF-8') . "</pre>";
 
-        if ($target === "Trochilidae") {
+        if ($user_input === "Trochilidae") {
             $output .= "<br>Welldone! You did great job.";
         }
     } else {

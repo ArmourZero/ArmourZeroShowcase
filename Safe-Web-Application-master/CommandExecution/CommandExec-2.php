@@ -11,17 +11,17 @@ if (isset($_GET["typeBox"]) && !empty($_GET["typeBox"])) {
 
     // Strict validation: only allow predefined values
     if (in_array($safe_target, $allowed_values, true)) {
-        // Sanitize the input using escapeshellarg
-        $safe_target = escapeshellarg($safe_target);
+        // Sanitize again using escapeshellarg (assigned to a new variable)
+        $safe_target_escaped = escapeshellarg($safe_target);
 
         // Execute the sanitized command
-        $command_output = shell_exec("echo Selected: " . $safe_target);
+        $command_output = shell_exec("echo Selected: " . $safe_target_escaped);
 
         // Display both the selected input and the result of the command
-        $output = "Selected bird family: " . htmlspecialchars($_GET["typeBox"], ENT_QUOTES, 'UTF-8');
+        $output = "Selected bird family: " . htmlspecialchars($safe_target, ENT_QUOTES, 'UTF-8');
         $output .= "<br>Command output: <pre>" . htmlspecialchars($command_output, ENT_QUOTES, 'UTF-8') . "</pre>";
 
-        if ($_GET["typeBox"] === "Trochilidae") {
+        if ($safe_target === "Trochilidae") {
             $output .= "<br>Welldone! You did great job.";
         }
     } else {

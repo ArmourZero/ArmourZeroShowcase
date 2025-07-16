@@ -4,26 +4,22 @@ $output = "";
 $status_code = 200; // Default status code
 
 // Whitelist of allowed command values
-$allowed_values = ['Trochilidae', 'Apodidae', 'Strigidae'];
+$allowed_values = ['Armour', 'Zero'];
 
 if (isset($_GET["typeBox"]) && !empty($_GET["typeBox"])) {
     $safe_target = $_GET["typeBox"];
 
     // Strict validation: only allow predefined values
     if (in_array($safe_target, $allowed_values, true)) {
-        // Sanitize again using escapeshellarg (assigned to a new variable)
+        // Sanitize using escapeshellarg for safe shell usage
         $safe_target_escaped = escapeshellarg($safe_target);
 
-        // Execute the sanitized command
+        // Optional: simulate safe shell command execution
         $command_output = shell_exec("echo Selected: " . $safe_target_escaped);
 
-        // Display both the selected input and the result of the command
-        $output = "Selected bird family: " . htmlspecialchars($safe_target, ENT_QUOTES, 'UTF-8');
+        // Output result safely
+        $output = "Well Done!: " . htmlspecialchars($safe_target, ENT_QUOTES, 'UTF-8');
         $output .= "<br>Command output: <pre>" . htmlspecialchars($command_output, ENT_QUOTES, 'UTF-8') . "</pre>";
-
-        if ($safe_target === "Trochilidae") {
-            $output .= "<br>Welldone! You did great job.";
-        }
     } else {
         $output = "Invalid input.";
     }

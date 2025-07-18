@@ -135,7 +135,7 @@
         <h1>ArmourZero’s Automated Vulnerability Management (AVM) platform</h1>
     </div>
     <div class="main-container">
-        <h2>Securr Website After Using ArmourZero's AVM</h2>
+        <h2>Secure Website After Using ArmourZero's AVM</h2>
         <p>Vulnerabilities are resolved on this website using ArmourZero’s AVM platform.</p>
        
     </div>

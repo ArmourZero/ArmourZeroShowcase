@@ -1,0 +1,9 @@
+# Ignore specific secret storage file.
+/.secret_store.json
+
+# OS / editor files
+*.log
+*.cache
+*.tmp
+.DS_Store
+Thumbs.db

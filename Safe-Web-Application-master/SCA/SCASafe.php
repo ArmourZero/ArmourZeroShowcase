@@ -1,196 +1,130 @@
 <?php
-// Process PHP logic before any output
-$output = "";
-$status_code = 200; // Default status code
+require './vendor/phpmailer/phpmailer/src/PHPMailer.php';
+require './vendor/phpmailer/phpmailer/src/SMTP.php';
 
-// Whitelist of allowed feature names
-$allowed_features = ['Feature1', 'Feature2', 'Feature3'];
+use PHPMailer\PHPMailer\PHPMailer;
 
-if (isset($_GET["feature"]) && !empty($_GET["feature"])) {
-    $feature = $_GET["feature"];
-    // Strict validation: only allow predefined values
-    if (in_array($feature, $allowed_features, true)) {
-        $output = "Selected feature: " . htmlspecialchars($feature, ENT_QUOTES, 'UTF-8');
-        if ($feature === "Feature1") {
-            $output .= "<br>Welldone! You selected the first feature.";
-        }
-    } else {
-        $status_code = 400;
-        $output = "Invalid input. Please select a valid feature name.";
-    }
-} else {
-    $output = "Please enter a feature name.";
+function sanitize($data) {
+    return htmlspecialchars($data, ENT_QUOTES, 'UTF-8');
+}
+function normalizeInput($data) {
+    return str_replace(["\r", "\n"], ['\\r', '\\n'], urldecode($data));
 }
 
-// Set HTTP response code before any output
-http_response_code($status_code);
+$version = PHPMailer::VERSION ?? 'Unknown';
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="../Resources/hmbct.png" />
-    <title>SCA - Secured</title>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <style>
-        body {
-            font-family: 'Inter', Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #ffffff;
-            animation: fadeIn 0.5s ease-in;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        .header {
-            background: linear-gradient(180deg, #77DD76, #66CC65);
-            padding: 20px;
-            text-align: center;
-            width: 100%;
-            border-radius: 20px 20px 0 0;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-        }
-        .header-content {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        .header button {
-            padding: 12px 24px;
-            font-size: 16px;
-            background-color: #fff;
-            border: 2px solid #fff;
-            border-radius: 6px;
-            cursor: pointer;
-            color: #77DD76;
-            font-weight: 500;
-            transition: background-color 0.3s, color 0.3s, transform 0.2s;
-        }
-        .header button:hover {
-            background-color: #77DD76;
-            color: #fff;
-            transform: translateY(-2px);
-        }
-        .main-container {
-            background-color: #BDE7BD;
-            padding: 30px 0;
-            width: 100%;
-        }
-        .main-content {
-            max-width: 600px;
-            margin: 0 auto;
-            text-align: center;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-        }
-        .main-content h1 {
-            font-size: 24px;
-            color: #333;
-            margin-bottom: 20px;
-            font-weight: 600;
-        }
-        .main-content p {
-            font-size: 16px;
-            color: #333;
-            margin-bottom: 20px;
-            line-height: 1.5;
-        }
-        .main-content .exploit-example {
-            font-style: italic;
-        }
-        .main-content form {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 15px;
-        }
-        .main-content label {
-            font-size: 18px;
-            color: #333;
-            font-weight: 500;
-        }
-        .main-content input[type="text"] {
-            padding: 12px;
-            font-size: 16px;
-            border: 2px solid #77DD76;
-            border-radius: 6px;
-            width: 80%;
-            max-width: 400px;
-            box-sizing: border-box;
-            transition: border-color 0.3s;
-        }
-        .main-content input[type="text"]:focus {
-            border-color: #66CC65;
-            outline: none;
-        }
-        .main-content input[type="submit"] {
-            padding: 12px 24px;
-            font-size: 16px;
-            background-color: #77DD76;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            color: white;
-            transition: background-color 0.3s, transform 0.2s;
-        }
-        .main-content input[type="submit"]:hover {
-            background-color: #66CC65;
-            transform: translateY(-2px);
-        }
-        .output-container {
-            background-color: #ecf2d0;
-            padding: 20px 0;
-            width: 100%;
-            border-radius: 0 0 20px 20px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-        }
-        .output-content {
-            max-width: 600px;
-            margin: 0 auto;
-            text-align: center;
-            padding: 20px;
-            font-size: 16px;
-            color: #333;
-        }
-        @media (max-width: 600px) {
-            .main-content h1 {
-                font-size: 20px;
-            }
-            .main-content {
-                padding: 15px;
-            }
-            .main-content p, .main-content label, .output-content {
-                font-size: 14px;
-            }
-            .main-content input[type="text"] {
-                width: 90%;
-            }
-        }
-    </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="../Resources/hmbct.png" />
+  <title>SCA - Secured</title>
+  <style>
+    :root {
+      --primary: #ff9500;
+      --accent:  #ff8c00;
+      --black:   #121212;
+      --white:   #FFFFFF;
+    }
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      padding: 20px;
+      font-size: 17px;
+    }
+    .main-content {
+      background: #1e1e1e;
+      padding: 30px;
+      border-radius: 8px;
+      border: 1px solid #333;
+      text-align: center;
+    }
+    h1 {
+      color: var(--primary);
+      font-size: 32px;
+      margin-bottom: 20px;
+    }
+    input[type="text"] {
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: 2px solid var(--primary);
+      width: 80%;
+      max-width: 400px;
+      box-sizing: border-box;
+      margin-bottom: 15px;
+    }
+    button[type="submit"] {
+      padding: 12px;
+      font-size: 20px;
+      background: linear-gradient(to bottom, var(--primary), var(--accent));
+      color: #000;
+      cursor: pointer;
+      border: none;
+      border-radius: 6px;
+      box-shadow: 0 0 10px var(--primary);
+      transition: all 0.3s ease;
+      font-weight: bold;
+      font-size: 16px;
+    }
+    button[type="submit"]:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 0 20px var(--primary);
+    }
+    .output {
+      background: #121212;
+      padding: 20px;
+      border-radius: 8px;
+      color: var(--primary);
+      border: 1px solid #333;
+      margin-top: 20px;
+    }
+    pre {
+      text-align: left;
+      background: #000;
+      padding: 15px;
+      border-radius: 6px;
+      color: #ff9500;
+      overflow-x: auto;
+      padding-top: 20px;
+    }
+  </style>
 </head>
 <body>
-    <div class="header">
-        <div class="header-content">
-            <button type="button" name="homeButton" onclick="location.href='../homepage.html';">Home Page</button>
-        </div>
+    <div class="main-content">
+      <h1>PHPMailer Injection Protection Demo</h1>
+      <div class="container">
+          <p>This demo shows how <strong>modern PHPMailer (v<?= sanitize($version) ?>)</strong> protects against header injection vulnerabilities by sanitizing user input.</p>
+          <!-- <p>Enter an example injeection:</p> <i>victim@example.com%0ABcc:attacker@example.com</i> -->
+          <div class="example-input">
+              <p>Example Injection Attempt: <em>victim@example.com%0ABcc:attacker@example.com</em></p>
+          </div>
+
+          <form method="POST" action="SCA/SCASafe.php">
+              <label for="to"><strong>Enter Recipient Email:</strong></label> <br><br>
+              <input type="text" id="to" name="to" placeholder="example@example.com" required>
+              <button type="submit" >Simulate Mail Headers</button>
+          </form>
+          <div class="output">
+            <?php if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['to'])):
+                $rawInput = normalizeInput($_POST['to']);
+                $safeEmail = filter_var($rawInput, FILTER_SANITIZE_EMAIL);
+            ?>
+                <pre>
+  To: <?= sanitize($safeEmail) . "\n" ?>
+  From: admin@example.com
+  Subject: PHPMailer Injection Demo (Safe)
+  X-Mailer: PHPMailer <?= sanitize($version) ?> (patched)
+                </pre>
+                <div class="note">
+                    <span class="safe">✔ Safe:</span> Any header injection attempts are neutralized. Input is sanitized before use.
+                </div>
+                <?php else: ?>
+                Please enter a value.
+            <?php endif; ?>
+          </div>
+      </div>
     </div>
-    <div class="main-container">
-        <div class="main-content">
-            <h1>SCA - Secured</h1>
-            <p class="exploit-example">
-                Vulnerability is fixed; the page uses an updated jQuery library (3.7.1) with no known vulnerabilities.
-            </p>
-           
-        </div>
-  
-    <script>
-        // Simple jQuery usage to demonstrate library inclusion
-        $(document).ready(function() {
-            $("input[name='feature']").on("input", function() {
-                console.log("Feature input changed: " + $(this).val());
-            });
-        });
-    </script>
 </body>
 </html>

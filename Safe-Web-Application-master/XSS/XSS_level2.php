@@ -1,183 +1,106 @@
 <?php
-    $output = ""; // Initialize the variable to avoid warnings
+$output = "";
+$status_code = 200;
+$current_mode = (isset($_GET['mode']) && $_GET['mode'] === 'vulnerable') ? 'vulnerable' : 'safe';
 
-    if (isset($_GET["username"])) {
-        if (!empty($_GET["username"])) {
-            $user = htmlspecialchars($_GET["username"], ENT_QUOTES, 'UTF-8');
-            $output = "Your name is " . $user;
-        } else {
-            $output = "Please enter a value.";
-        }
-    } else {
-        $output = "Please enter a value.";
-    }
+if (isset($_GET["username"])) {
+  if (!empty($_GET["username"])) {
+    $user = htmlspecialchars($_GET["username"], ENT_QUOTES, 'UTF-8');
+    $output = "Your name is " . $user;
+  } else {
+    $output = "Please enter a value.";
+  }
+} else {
+  $output = "Please enter a value.";
+}
+
+http_response_code($status_code);
 ?>
-
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="../Resources/hmbct.png" />
-    <title>XSS 2</title>
-    <style>
-        body {
-            font-family: 'Inter', Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #ffffff;
-            animation: fadeIn 0.5s ease-in;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        .header {
-            background: linear-gradient(180deg, #77DD76, #66CC65);
-            padding: 20px;
-            text-align: center;
-            width: 100%;
-            border-radius: 20px 20px 0 0;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-        }
-        .header-content {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        .header button {
-            padding: 12px 24px;
-            font-size: 16px;
-            background-color: #fff;
-            border: 2px solid #fff;
-            border-radius: 6px;
-            cursor: pointer;
-            color: #77DD76;
-            font-weight: 500;
-            transition: background-color 0.3s, color 0.3s, transform 0.2s;
-        }
-        .header button:hover {
-            background-color: #77DD76;
-            color: #fff;
-            transform: translateY(-2px);
-        }
-        .main-container {
-            background-color: #BDE7BD;
-            padding: 30px 0;
-            width: 100%;
-        }
-        .main-content {
-            max-width: 600px;
-            margin: 0 auto;
-            text-align: center;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-        }
-        .main-content h1 {
-            font-size: 24px;
-            color: #333;
-            margin-bottom: 20px;
-            font-weight: 600;
-        }
-        .main-content p {
-            font-size: 16px;
-            color: #333;
-            margin-bottom: 20px;
-            line-height: 1.5;
-        }
-        .main-content form {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 15px;
-        }
-        .main-content label {
-            font-size: 18px;
-            color: #333;
-            font-weight: 500;
-        }
-        .main-content input[type="text"] {
-            padding: 12px;
-            font-size: 16px;
-            border: 2px solid #77DD76;
-            border-radius: 6px;
-            width: 80%;
-            max-width: 400px;
-            box-sizing: border-box;
-            transition: border-color 0.3s;
-        }
-        .main-content input[type="text"]:focus {
-            border-color: #66CC65;
-            outline: none;
-        }
-        .main-content input[type="submit"] {
-            padding: 12px 24px;
-            font-size: 16px;
-            background-color: #77DD76;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            color: white;
-            transition: background-color 0.3s, transform 0.2s;
-        }
-        .main-content input[type="submit"]:hover {
-            background-color: #66CC65;
-            transform: translateY(-2px);
-        }
-        .output-container {
-            background-color: #ecf2d0;
-            padding: 20px 0;
-            width: 100%;
-            border-radius: 0 0 20px 20px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-        }
-        .output-content {
-            max-width: 600px;
-            margin: 0 auto;
-            text-align: center;
-            padding: 20px;
-            font-size: 16px;
-            color: #333;
-        }
-        @media (max-width: 600px) {
-            .main-content h1 {
-                font-size: 20px;
-            }
-            .main-content {
-                padding: 15px;
-            }
-            .main-content p, .main-content label, .output-content {
-                font-size: 14px;
-            }
-            .main-content input[type="text"] {
-                width: 90%;
-            }
-        }
-    </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>XSS 2</title>
+  <style>
+    :root {
+      --primary: #ff9500;
+      --accent:  #ff8c00;
+      --black:   #121212;
+      --white:   #FFFFFF;
+    }
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      padding: 20px;
+      font-size: 17px;
+    }
+    .main-content {
+      background: #1e1e1e;
+      padding: 30px;
+      border-radius: 8px;
+      border: 1px solid #333;
+      text-align: center;
+    }
+    h1 {
+      color: var(--primary);
+      font-size: 32px;
+      margin-bottom: 20px;
+    }
+    input[type="text"] {
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: 2px solid var(--primary);
+      width: 80%;
+      max-width: 400px;
+      box-sizing: border-box;
+      margin-bottom: 15px;
+    }
+    input[type="submit"] {
+      padding: 12px;
+      font-size: 20px;
+      background: linear-gradient(to bottom, var(--primary), var(--accent));
+      color: #000;
+      cursor: pointer;
+      border: none;
+      border-radius: 6px;
+      box-shadow: 0 0 10px var(--primary);
+      transition: all 0.3s ease;
+      font-weight: bold;
+      font-size: 16px;
+    }
+    input[type="submit"]:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 0 20px var(--primary);
+    }
+    .output {
+      background: #121212;
+      padding: 20px;
+      border-radius: 8px;
+      color: var(--primary);
+      border: 1px solid #333;
+      margin-top: 20px;
+    }
+  </style>
 </head>
 <body>
-    <div class="header">
-        <div class="header-content">
-            <button type="button" name="homeButton" onclick="location.href='../homepage.html';">Home Page</button>
-        </div>
-    </div>
-    <div class="main-container">
-        <div class="main-content">
-            <h1>XSS Vulnerability Exploitation</h1>
-            <p class="exploit-example">
-            <b>Try XSS Exploit again by using:</b> http://example.com/script.php?username=&lt;img src=x onerror=alert('XSS')&gt; <br><br>
-            No pop-up alert occured. Successfully prevented attempted XSS exploitation. 
-
-            </p>
-            <form method="GET" action="" name="form">
-                <label>Input here:</label>
-                <input type="text" name="username">
-                <input type="submit" name="submit" value="Submit">
-            </form>
-        </div>
-    </div>
-    <div class="output-container">
-        <div class="output-content">
-            <?php echo $output; ?>
-        </div>
-    </div>
+  <div class="main-content">
+    <h1>XSS Vulnerability Exploitation <?= $current_mode === 'safe' ? 'Solved' : 'Demo'; ?></h1>
+    <p>
+      <b>Try XSS Exploit again by using:</b><br>
+      http://example.com/script.php?username=&lt;img src=x onerror=alert('XSS')&gt;<br>
+      <?= $current_mode === 'safe'
+        ? 'No pop-up alert occurred. Successfully prevented attempted XSS exploitation.'
+        : 'This demo shows how reflected XSS can be triggered when user input is not sanitized.'; ?>
+    </p>
+    <form action="XSS/XSS_level2.php" method="GET">
+      <input type="hidden" name="mode" value="<?= $current_mode; ?>">
+      <label for="username">Input here:</label>
+      <input type="text" name="username" id="username" value="">
+      <input type="submit" value="Submit">
+    </form>
+    <div class="output"><?= $output; ?></div>
+  </div>
 </body>
 </html>

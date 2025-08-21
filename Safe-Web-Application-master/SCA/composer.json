@@ -1,0 +1,9 @@
+{
+  "name": "az/sca",
+  "description": "import known vulnerable dependencies into your PHP website for demo or training purposes",
+  "type": "project",
+  "license": "MIT",
+  "require": {
+    "phpmailer/phpmailer": ">=6.5.1"
+  }
+}

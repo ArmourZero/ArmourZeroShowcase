@@ -1,199 +1,148 @@
 <?php
-// Process PHP logic before any output
-$output = "";
-$status_code = 200; // Default status code
-$exploit_example = "private_key";
-$safe_exploit_example = htmlspecialchars($exploit_example, ENT_QUOTES, 'UTF-8');
+declare(strict_types=1);
+session_start([
+    'cookie_httponly' => true,
+    'cookie_secure' => isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off',
+    'use_strict_mode' => true,
+    'cookie_samesite' => 'Lax',
+]);
 
-// Whitelist of allowed key identifiers
-$allowed_keys = ['Key1', 'Key2', 'Key3'];
+require_once __DIR__ . '/SecretManager.php';
+$manager = new SecretManager();
 
-if (isset($_GET["key"]) && !empty($_GET["key"])) {
-    $key = $_GET["key"];
-    // Strict validation: only allow predefined values
-    if (in_array($key, $allowed_keys, true)) {
-        $output = "Selected key identifier: " . htmlspecialchars($key, ENT_QUOTES, 'UTF-8');
-        if ($key === "Key1") {
-            $output .= "<br>Welldone! You selected the first key.";
-        }
-    } else {
-        $status_code = 400;
-        $output = "Invalid input. Please select a valid key identifier.";
-    }
-} else {
-    $output = "Please enter a key identifier.";
+// Generate CSRF token
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
 
-// Set HTTP response code before any output
-http_response_code($status_code);
+// $masked = htmlspecialchars($manager->getMasked(), ENT_QUOTES | ENT_HTML5);
+$apiKeyHash = htmlspecialchars($manager->getHash(), ENT_QUOTES | ENT_HTML5);
+
+
+// Handle POST (secure the key)
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $token = $_POST['csrf_token'] ?? '';
+    if (!is_string($token) || !hash_equals($_SESSION['csrf_token'], $token)) {
+        http_response_code(400);
+
+    } else {
+        $manager->rotateAndHide();
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(32)); // rotate CSRF
+        // $masked = htmlspecialchars($manager->getMasked(), ENT_QUOTES | ENT_HTML5);
+        $apiKeyHash = htmlspecialchars($manager->getHash(), ENT_QUOTES | ENT_HTML5);
+
+    }
+}
 ?>
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="../Resources/hmbct.png" />
-    <title>Private Key Exposure - Secured</title>
-    <style>
-        body {
-            font-family: 'Inter', Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #ffffff;
-            animation: fadeIn 0.5s ease-in;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        .header {
-            background: linear-gradient(180deg, #77DD76, #66CC65);
-            padding: 20px;
-            text-align: center;
-            width: 100%;
-            border-radius: 20px 20px 0 0;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-        }
-        .header-content {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        .header button {
-            padding: 12px 24px;
-            font-size: 16px;
-            background-color: #fff;
-            border: 2px solid #fff;
-            border-radius: 6px;
-            cursor: pointer;
-            color: #77DD76;
-            font-weight: 500;
-            transition: background-color 0.3s, color 0.3s, transform 0.2s;
-        }
-        .header button:hover {
-            background-color: #77DD76;
-            color: #fff;
-            transform: translateY(-2px);
-        }
-        .main-container {
-            background-color: #BDE7BD;
-            padding: 30px 0;
-            width: 100%;
-        }
-        .main-content {
-            max-width: 600px;
-            margin: 0 auto;
-            text-align: center;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-        }
-        .main-content h1 {
-            font-size: 24px;
-            color: #333;
-            margin-bottom: 20px;
-            font-weight: 600;
-        }
-        .main-content p {
-            font-size: 16px;
-            color: #333;
-            margin-bottom: 20px;
-            line-height: 1.5;
-        }
-        .main-content .exploit-example {
-            font-style: italic;
-        }
-        .main-content form {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 15px;
-        }
-        .main-content label {
-            font-size: 18px;
-            color: #333;
-            font-weight: 500;
-        }
-        .main-content input[type="text"] {
-            padding: 12px;
-            font-size: 16px;
-            border: 2px solid #77DD76;
-            border-radius: 6px;
-            width: 80%;
-            max-width: 400px;
-            box-sizing: border-box;
-            transition: border-color 0.3s;
-        }
-        .main-content input[type="text"]:focus {
-            border-color: #66CC65;
-            outline: none;
-        }
-        .main-content input[type="submit"] {
-            padding: 12px 24px;
-            font-size: 16px;
-            background-color: #77DD76;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            color: white;
-            transition: background-color 0.3s, transform 0.2s;
-        }
-        .main-content input[type="submit"]:hover {
-            background-color: #66CC65;
-            transform: translateY(-2px);
-        }
-        .output-container {
-            background-color: #ecf2d0;
-            padding: 20px 0;
-            width: 100%;
-            border-radius: 0 0 20px 20px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-        }
-        .output-content {
-            max-width: 600px;
-            margin: 0 auto;
-            text-align: center;
-            padding: 20px;
-            font-size: 16px;
-            color: #333;
-        }
-        @media (max-width: 600px) {
-            .main-content h1 {
-                font-size: 20px;
-            }
-            .main-content {
-                padding: 15px;
-            }
-            .main-content p, .main-content label, .output-content {
-                font-size: 14px;
-            }
-            .main-content input[type="text"] {
-                width: 90%;
-            }
-        }
-    </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="../Resources/hmbct.png" />
+  <title>Private Key Exposure - Secured</title>
+  <style>
+    :root {
+      --primary: #ff9500;
+      --accent:  #ff8c00;
+      --black:   #121212;
+      --white:   #FFFFFF;
+    }
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      padding: 20px;
+      font-size: 17px;
+    }
+    .main-content {
+      background: #1e1e1e;
+      padding: 30px;
+      border-radius: 8px;
+      border: 1px solid #333;
+      text-align: center;
+    }
+    h1 {
+      color: var(--primary);
+      font-size: 32px;
+      margin-bottom: 20px;
+    }
+    input[type="text"] {
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: 2px solid var(--primary);
+      width: 80%;
+      max-width: 400px;
+      box-sizing: border-box;
+      margin-bottom: 15px;
+    }
+    input[type="submit"] {
+      padding: 12px;
+      font-size: 20px;
+      background: linear-gradient(to bottom, var(--primary), var(--accent));
+      color: #000;
+      cursor: pointer;
+      border: none;
+      border-radius: 6px;
+      box-shadow: 0 0 10px var(--primary);
+      transition: all 0.3s ease;
+      font-weight: bold;
+      font-size: 16px;
+    }
+    input[type="submit"]:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 0 20px var(--primary);
+    }
+    input[type="submit"]:disabled {
+      background: #444;
+      color: #aaa;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    .output {
+      background: #121212;
+      padding: 20px;
+      border-radius: 8px;
+      color: var(--primary);
+      border: 1px solid #333;
+      margin-top: 20px;
+      text-align: center;
+      display: flex;            /* Flexbox for vertical + horizontal centering */
+      justify-content: center;  /* Horizontal */
+      align-items: center;      /* Vertical */
+      flex-wrap: wrap;
+      overflow-wrap: anywhere;
+      max-width: 100%;
+    }
+    
+
+  </style>
 </head>
 <body>
-    <div class="header">
-        <div class="header-content">
-            <button type="button" name="homeButton" onclick="location.href='../homepage.html';">Home Page</button>
-        </div>
+  <div class="main-container">
+    <div class="main-content">
+        <h1>Private Key Exposure - Secured</h1>
+        <p><b>Exploit Example:</b> The API was leaked, but you can secure it.</p>
+        <form method="POST" action="Secrets/KeyExposureSafe.php">
+            <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES | ENT_HTML5); ?>">
+            <?php if (!empty($manager->getMeta()['rotated'])): ?>
+                <input type="submit" value="Secured" disabled>
+                <?php else: ?>
+                <input type="submit" value="Secure the Key">
+            <?php endif; ?>
+        </form>
+      
+        <div class="output">
+          <?php 
+          $meta = $manager->getMeta();
+          if (!empty($meta['rotated'])): ?>
+              <strong>API Key (hashed):</strong> <?php echo $apiKeyHash; ?>
+          <?php else: ?>
+              <strong>Key Status:</strong> <?php echo "YOUR_LEAKED_API_KEY"; ?>
+          <?php endif; ?>
+      </div>
     </div>
-    <div class="main-container">
-        <div class="main-content">
-            <h1>Private Key Exposure - Secured</h1>
-            <p class="exploit-example">
-                <b>Exploit Example:</b> <?php echo $safe_exploit_example; ?><br>
-                Vulnerability is fixed; the attacker cannot access the private key.
-            </p>
-            <form method="GET" action="" name="form">
-                <label>Key Identifier:</label>
-                <input type="text" name="key">
-                <input type="submit" name="submit" value="Submit">
-            </form>
-        </div>
-    </div>
-    <div class="output-container">
-        <div class="output-content">
-            <?php echo $output; ?>
-        </div>
-    </div>
+  </div>
 </body>
 </html>

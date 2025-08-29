@@ -40,6 +40,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="shortcut icon" href="../Resources/hmbct.png" />
   <title>Private Key Exposure - Secured</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Figtree:wght@300..900&display=swap"
+    rel="stylesheet"
+  />
   <style>
     :root {
       --primary: #ff9500;
@@ -50,9 +56,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     body {
       background: var(--black);
       color: var(--white);
-      font-family: 'Inter', sans-serif;
+      font-family: 'Figtree', sans-serif;
       padding: 20px;
-      font-size: 17px;
+      font-size: 20px;
+      font-weight: 400; 
     }
     .main-content {
       background: #1e1e1e;
@@ -65,6 +72,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       color: var(--primary);
       font-size: 32px;
       margin-bottom: 20px;
+      font-weight: 700;
+    }
+    strong, b {
+      font-weight: 700;
     }
     input[type="text"] {
       padding: 12px;
@@ -108,15 +119,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       border: 1px solid #333;
       margin-top: 20px;
       text-align: center;
-      display: flex;            /* Flexbox for vertical + horizontal centering */
-      justify-content: center;  /* Horizontal */
-      align-items: center;      /* Vertical */
+      display: flex;
+      justify-content: center;
+      align-items: center;
       flex-wrap: wrap;
       overflow-wrap: anywhere;
       max-width: 100%;
     }
-    
-
   </style>
 </head>
 <body>
@@ -132,7 +141,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <input type="submit" value="Secure the Key">
             <?php endif; ?>
         </form>
-      
+      </div>
         <div class="output">
           <?php 
           $meta = $manager->getMeta();

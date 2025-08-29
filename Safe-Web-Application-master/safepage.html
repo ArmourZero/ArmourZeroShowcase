@@ -4,6 +4,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="shortcut icon" href="Resources/hmbct.png" />
     <title>ArmourZero Web Application (Safe Mode)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Figtree:wght@300..900&display=swap"
+      rel="stylesheet"
+    />
     <style>
       :root {
         --primary: #ff9500;
@@ -14,8 +20,17 @@
         --background: #afafaf;
       }
 
+      /* Import Gotham Bold font */
+      @font-face {
+        font-family: "Gotham";
+        src: url("path-to-your-fonts/Gotham-Bold.woff2") format("woff2");
+        font-weight: 700;
+        font-style: normal;
+      }
+
       body {
-        font-family: "Inter", Arial, sans-serif;
+        font-family: "Gotham", sans-serif;
+        font-weight: 500; /* Apply bold weight */
         margin: 0;
         padding: 0;
         overflow: auto;
@@ -74,19 +89,15 @@
         2% {
           transform: translateX(1);
         }
-
         25% {
           transform: translateX(-25%);
         }
-
         50% {
           transform: translateX(-50%);
         }
-
         75% {
           transform: translateX(-25%);
         }
-
         100% {
           transform: translateX(1);
         }
@@ -117,19 +128,19 @@
       .header-logo {
         height: 50px;
         width: 110px;
-        /* flex-shrink: 0; */
         margin-left: 16px;
       }
 
       .header-title {
-        flex: 1; /* Takes available space between logo and mode */
+        flex: 1;
         text-align: center;
-        font-size: clamp(18px, 2vw, 24px);
-        font-weight: 1000;
+        font-size: clamp(30px, 2vw, 24px);
+        font-weight: 700;
         color: #fff;
       }
+
       .mode-display {
-        font-weight: 500;
+        font-weight: 700;
         text-align: center;
         background-color: var(--thirdary);
         color: #fff;
@@ -138,8 +149,9 @@
         white-space: nowrap;
       }
 
+      /* Button container with flex layout for 4 columns */
       .button-container {
-        padding: 30px;
+        padding: 10px;
         background-color: rgba(30, 30, 30, 0.8);
         border-radius: 0 0 20px 20px;
         text-align: center;
@@ -151,19 +163,21 @@
       }
 
       .action-button {
-        padding: 14px 28px;
+        padding: 6px 16px;
         background: linear-gradient(to bottom, var(--primary), var(--accent));
         color: #000;
         border: none;
         border-radius: 8px;
         cursor: pointer;
         min-width: 160px;
-        font-weight: bold;
-        font-size: medium;
+        font-weight: 700;
+        font-size: 18px;
+        font-family: "Figtree", sans-serif;
         transition: all 0.3s ease;
         box-shadow: 0 0 10px var(--primary);
         flex: 1;
-        max-width: 220px;
+        max-width: 178px;
+        margin: 10px;
       }
 
       .action-button:hover {
@@ -180,81 +194,96 @@
         box-shadow: 0 0 10px #000;
         color: white;
         overflow-x: auto;
+        font-family: "Figtree", sans-serif;
+      }
+
+      .warning-banner {
+        background: var(--thirdary);
+        color: white;
+        text-align: center;
+        padding: 10px;
+        font-weight: 700;
+        margin-bottom: 20px;
       }
 
       /* Improved responsive design */
       @media (max-width: 768px) {
         .header {
-          grid-template-columns: auto 1fr auto; /* logo | title | mode */
-          grid-template-rows: 1fr;
+          grid-template-columns: auto 1fr auto;
           gap: 10px;
         }
+
         .header-logo {
           height: clamp(57px, 5vw, 50px);
         }
+
         .header h1 {
           font-size: clamp(18px, 5vw, 24px);
           margin-top: 8px;
-          font-weight: 700;
+          font-weight: 500;
         }
-
         .mode-display {
           max-width: 79px;
           height: 36px;
-          font-size: 12px;
-          padding: 8px 10px;
+          font-size: 15px;
+          padding: 0px 17px;
           line-height: 1.2;
           white-space: normal;
           place-content: center;
+          font-weight: 1000;
         }
 
         .button-container {
+          grid-template-columns: 1fr;
+          gap: 10px;
           padding: 20px;
-          gap: 8px;
         }
 
         .action-button {
           width: 100%;
           margin: 0;
-          padding: 12px 20px;
-          font-size: 14px;
-          min-width: unset;
+          padding: 14px 10px;
+          font-size: 16px;
+          min-height: 50px;
         }
       }
 
       /* Extreme zoom support */
       @media (max-width: 480px) {
         .header {
-          padding: 40px 10px 10px 10px;
-          min-height: 60px;
+          flex-direction: column;
+          align-items: flex-start;
         }
 
         .header-logo {
-          height: 30px;
+          height: 45px;
+          width: 45px;
         }
-
-        .header h1 {
-          font-size: clamp(16px, 4.5vw, 20px);
-        }
-
+        .header-title,
         .mode-display {
-          font-size: clamp(8px, 2vw, 10px);
-          padding: 5px 10px;
+          text-align: left;
+          width: 100%;
+          margin-top: 5px;
+        }
+
+        .header-logo {
+          margin-bottom: 5px;
         }
 
         .button-container {
           padding: 15px;
+          gap: 8px;
         }
 
         .action-button {
-          padding: 10px 15px;
+          padding: 12px 8px;
           font-size: 13px;
+          min-height: 45px;
         }
       }
     </style>
   </head>
   <body>
-    <!-- Wave background elements -->
     <div>
       <div class="wave"></div>
       <div class="wave"></div>
@@ -296,9 +325,7 @@
         </button>
       </div>
 
-      <div id="content-display">
-        <!-- Content will load here without page refresh -->
-      </div>
+      <div id="content-display"></div>
     </div>
 
     <script>

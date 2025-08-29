@@ -22,6 +22,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['to'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PHPMailer Header Injection Demo</title>
     <link rel="shortcut icon" href="../Resources/hmbct.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Figtree:wght@300..900&display=swap"
+      rel="stylesheet"
+    />
     <style>
         :root {
             --primary: #ff9500;
@@ -32,9 +38,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['to'])) {
         body {
             background: var(--black);
             color: var(--white);
-            font-family: 'Inter', sans-serif;
+            font-family: 'Figtree', sans-serif;
             padding: 20px;
-            font-size: 17px;
+            font-size: 20px;
+            font-weight: 400;
         }
         .main-content {
             background: #1e1e1e;
@@ -45,8 +52,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['to'])) {
         }
         h1 {
             color: var(--primary);
-            font-size: 32px;
+            font-size: 34px;
             margin-bottom: 20px;
+            font-weight: 700;
+        }
+        code {
+            background: #000;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #ff9500;
+            font-size: 20px;
+        }
+        b, strong, em {
+            font-weight: 700;
         }
         input[type="text"] {
             padding: 12px;
@@ -91,6 +109,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['to'])) {
             color: #ff9500;
             overflow-x: auto;
         }
+        @media (max-width: 656px) {
+            code {
+                background: #000;
+                padding: 2px 6px;
+                border-radius: 4px;
+                color: #ff9500;
+                font-size: 14px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -102,11 +129,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['to'])) {
         <code>victim@example.com%0ABcc:attacker@example.com</code></em>
 
         <form method="POST" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>">
-            <br><h4 for="to">Enter Recipient Email (user input):</h4>
-            <input type="text" name="to" id="to" value="<?php echo isset($_POST['to']) ? sanitize($_POST['to']) : ''; ?>" required><br>
+            <br><h4 for="to">Enter Recipient Email:</h4>
+            <input type="text" name="to" id="to" placeholder="example@example.com" value="<?php echo isset($_POST['to']) ? sanitize($_POST['to']) : ''; ?>" required><br>
             <button type="submit">Simulate Email Headers</button>
         </form>
-
+    </div>
         <div class="output">
             <?php if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['to'])): ?>
 
@@ -119,7 +146,5 @@ X-Mailer: PHPMailer 5.2.2 (vulnerable)</pre>
             <?php else: echo "Please enter a value.";endif ?>
         </div>
     </div>
-
-    
 </body>
 </html>

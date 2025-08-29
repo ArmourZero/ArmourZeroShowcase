@@ -15,8 +15,17 @@
         --background: #afafaf;
       }
 
+      /* Import Gotham Bold font */
+      @font-face {
+        font-family: "Gotham";
+        src: url("path-to-your-fonts/Gotham-Bold.woff2") format("woff2");
+        font-weight: 700;
+        font-style: normal;
+      }
+
       body {
-        font-family: "Inter", Arial, sans-serif;
+        font-family: "Gotham", sans-serif;
+        font-weight: 500; /* Apply bold weight */
         margin: 0;
         padding: 0;
         overflow: auto;
@@ -114,20 +123,19 @@
       .header-logo {
         height: 50px;
         width: 110px;
-        /* flex-shrink: 0; */
         margin-left: 16px;
       }
 
       .header-title {
-        flex: 1; /* Takes available space between logo and mode */
+        flex: 1;
         text-align: center;
-        font-size: clamp(18px, 2vw, 24px);
-        font-weight: 1000;
+        font-size: clamp(30px, 2vw, 24px);
+        font-weight: 700;
         color: #fff;
       }
 
       .mode-display {
-        font-weight: 500;
+        font-weight: 700;
         text-align: center;
         background-color: var(--thirdary);
         color: #fff;
@@ -136,9 +144,9 @@
         white-space: nowrap;
       }
 
-      /* UPDATED: Button container with flex layout for 4 columns */
+      /* Button container with flex layout for 4 columns */
       .button-container {
-        padding: 30px;
+        padding: 10px;
         background-color: rgba(30, 30, 30, 0.8);
         border-radius: 0 0 20px 20px;
         text-align: center;
@@ -149,21 +157,22 @@
         gap: 10px;
       }
 
-      /* Action button same as Safe Mode */
       .action-button {
-        padding: 14px 28px;
+        padding: 6px 16px;
         background: linear-gradient(to bottom, var(--primary), var(--accent));
         color: #000;
         border: none;
         border-radius: 8px;
         cursor: pointer;
         min-width: 160px;
-        font-weight: bold;
-        font-size: medium;
+        font-weight: 700;
+        font-size: 18px;
+        font-family: "Figtree", sans-serif;
         transition: all 0.3s ease;
         box-shadow: 0 0 10px var(--primary);
         flex: 1;
-        max-width: 220px;
+        max-width: 178px;
+        margin: 10px;
       }
 
       .action-button:hover {
@@ -180,6 +189,7 @@
         box-shadow: 0 0 10px #000;
         color: white;
         overflow-x: auto;
+        font-family: "Figtree", sans-serif;
       }
 
       .warning-banner {
@@ -187,15 +197,14 @@
         color: white;
         text-align: center;
         padding: 10px;
-        font-weight: bold;
+        font-weight: 700;
         margin-bottom: 20px;
       }
 
       /* Improved responsive design */
       @media (max-width: 768px) {
         .header {
-          grid-template-columns: auto 1fr auto; /* logo | title | mode */
-          grid-template-rows: 1fr;
+          grid-template-columns: auto 1fr auto;
           gap: 10px;
         }
 
@@ -204,23 +213,21 @@
         }
 
         .header h1 {
-          /* grid-column: 1 / span 2;
-          grid-row: 2; */
           font-size: clamp(18px, 5vw, 24px);
           margin-top: 8px;
-          font-weight: 700;
+          font-weight: 500;
         }
         .mode-display {
           max-width: 79px;
           height: 36px;
-          font-size: 12px;
-          padding: 8px 10px;
+          font-size: 10px;
+          padding: 0px 17px;
           line-height: 1.2;
           white-space: normal;
           place-content: center;
+          font-weight: 1000;
         }
 
-        /* UPDATED: Button layout for mobile */
         .button-container {
           grid-template-columns: 1fr;
           gap: 10px;
@@ -231,7 +238,7 @@
           width: 100%;
           margin: 0;
           padding: 14px 10px;
-          font-size: 14px;
+          font-size: 16px;
           min-height: 50px;
         }
       }
@@ -239,7 +246,7 @@
       /* Extreme zoom support */
       @media (max-width: 480px) {
         .header {
-          flex-direction: column; /* Stack vertically on very small screens */
+          flex-direction: column;
           align-items: flex-start;
         }
 
@@ -250,7 +257,7 @@
         .header-title,
         .mode-display {
           text-align: left;
-          width: 100%; /* Take full width when stacked */
+          width: 100%;
           margin-top: 5px;
         }
 
@@ -290,7 +297,7 @@
         <div class="mode-display" id="modeDisplay">VULNERABLE</div>
       </div>
 
-      <!-- UPDATED: Button container with 2x2 grid layout -->
+      <!-- Button container with 2x2 grid layout -->
       <div class="button-container">
         <button
           class="action-button"
@@ -376,22 +383,9 @@
         });
       }
 
-      // Detect and display zoom level
-      function detectZoom() {
-        const zoomLevel = Math.round(window.devicePixelRatio * 100);
-        document.getElementById(
-          "zoomHelper"
-        ).textContent = `Zoom: ${zoomLevel}%`;
-      }
-
-      // Initial detection and update on resize
-      window.addEventListener("load", detectZoom);
-      window.addEventListener("resize", detectZoom);
-
       // Initialize form handlers when page loads
       document.addEventListener("DOMContentLoaded", function () {
         attachFormHandlers();
-        detectZoom();
       });
     </script>
   </body>

@@ -4,6 +4,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="../Resources/hmbct.png" />
     <title>CommandExec-2</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Figtree:wght@300..900&display=swap"
+      rel="stylesheet"
+    />
     <style>
         :root {
             --primary: #ff9500;
@@ -14,9 +20,10 @@
         body {
             background: var(--black);
             color: var(--white);
-            font-family: 'Inter', sans-serif;
+            font-family: 'Figtree', sans-serif;
             padding: 20px;
-            font-size: 17px;
+            font-size: 20px;
+            font-weight: 400; /* This is optional but can be used for clarity */
         }
         .main-content {
             background: #1e1e1e;
@@ -29,6 +36,10 @@
             color: var(--primary);
             font-size: 32px;
             margin-bottom: 20px;
+            font-weight: 700;
+        }
+        b {
+            font-weight: 700;
         }
         input[type="text"] {
             padding: 12px;
@@ -74,7 +85,7 @@
         <p>
             <b>Example Execution:</b> <br>
             <b>Mac user:</b> http://example.com/script.php?typeBox=whoami|id<br>
-            <b>Window user:</b> http://example.com/script.php?typeBox=whoami&dir<br>
+            <b>Window user:</b> http://example.com/script.php?typeBox=whoami&dir<br> <br>
             The attacker sees the output of the id command, revealing the server user context.
         </p>
         <form action="CommandExecution/CommandExec-2.php" method="GET">
@@ -89,10 +100,10 @@
             $target = $_GET["typeBox"];
             $substitutions = array('&&' => '', ';' => '', '/' => '', '\\' => '');
             $target = str_replace(array_keys($substitutions), $substitutions, $target);
-            if ($target !== '') {
+            if (shell_exec($target) !== null) {
                 echo shell_exec($target);
             } else {
-                echo "Error: Invalid or empty command.";
+                echo "Error: Invalid command.";
             }
         } else {
             echo "Please enter a value.";

@@ -34,6 +34,12 @@ $message = $_SESSION['message'];
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="../Resources/hmbct.png" />
     <title>Private Key Exposure</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Figtree:wght@300..900&display=swap"
+      rel="stylesheet"
+    />
     <style>
         :root {
             --primary: #ff9500;
@@ -44,9 +50,10 @@ $message = $_SESSION['message'];
         body {
             background: var(--black);
             color: var(--white);
-            font-family: 'Inter', sans-serif;
+            font-family: 'Figtree', sans-serif;
             padding: 20px;
-            font-size: 17px;
+            font-size: 20px;
+            font-weight: 400; 
         }
         .main-content {
             background: #1e1e1e;
@@ -57,8 +64,12 @@ $message = $_SESSION['message'];
         }
         h1 {
             color: var(--primary);
-            font-size: 32px;
+            font-size: 34px;
             margin-bottom: 20px;
+            font-weight: 700;
+        }
+        b, strong {
+            font-weight: 700;
         }
         input[type="text"] {
             padding: 12px;
@@ -127,7 +138,6 @@ $message = $_SESSION['message'];
                 <?php if ($currentRole === 'Admin') echo 'disabled class="disabled"'; ?>>
                 Submit
             </button>
-            <!-- <input type="submit" name="submit" value="Submit"> -->
         </form>
         
     </div>

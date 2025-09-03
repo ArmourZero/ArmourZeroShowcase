@@ -4,7 +4,7 @@
   name: AZ-Security-Scan
   
   on:
-    push:
+    push: 
       branches: 
         - '*'
     workflow_dispatch:

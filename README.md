@@ -160,6 +160,46 @@ To run this showcase locally, install a web server stack like **XAMPP**, **MAMP*
 
 ---
 
+# ⚠️ Vulnerability 5: IaC Misconfiguration
+
+### 🔎 Where?
+
+Source: Terraform `.tf` file with insecure Security Group rules
+
+### 🛠️ Problem:
+
+- **Security Group**
+
+  - Ingress allows `0.0.0.0/0` → SSH exposed to the entire internet
+  - Egress allows `0.0.0.0/0` → Any outbound traffic permitted (no restrictions)
+
+- **S3 Bucket**
+
+  - `acl = "public-read"` → Bucket data is publicly accessible
+  - No proper access control applied
+
+- **Encryption**
+  - Server-Side Encryption disabled (`sse_algorithm = "NONE"`) → Data stored in plaintext
+
+### 💥 Impact:
+
+Attackers can:
+
+- Brute-force or steal SSH credentials and gain server access
+- Exfiltrate or overwrite sensitive files from the public S3 bucket
+- Intercept, modify, or leak unencrypted data
+- Use open egress to pivot into other systems or communicate with malicious servers
+
+### ✅ Secure Implementation:
+
+- Restrict Security Group ingress to trusted IP ranges only
+- Close unused ports; avoid exposing SSH to the internet
+- Use a VPN or Bastion Host for administrative access
+- Apply the principle of least privilege when defining firewall rules
+- Regularly scan IaC for misconfigurations before deployment
+
+---
+
 ## How ArmourZero Helps
 
 - **Detects** vulnerabilities like the ones above through scans

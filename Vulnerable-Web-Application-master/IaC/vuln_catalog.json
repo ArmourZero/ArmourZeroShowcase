@@ -1,0 +1,20 @@
+{
+  "SG_OPEN": {
+    "title": "Security Group open to the Internet",
+    "owasp": "A6:2017-Security Misconfiguration / A05:2021-Security Misconfiguration",
+    "cwe": "CWE-749",
+    "explanation": "Allows 0.0.0.0/0 — anyone on the internet can connect. Violates least privilege."
+  },
+  "SSH_EXPOSED": {
+    "title": "SSH exposed to internet",
+    "owasp": "A6:2017 / A05:2021",
+    "cwe": "CWE-732",
+    "explanation": "Port 22 open to the world. Attackers can brute-force or exploit SSH."
+  },
+  "XSS_SIM": {
+    "title": "Reflected XSS (simulated)",
+    "owasp": "A7:2017 / A03:2021 — Cross-Site Scripting",
+    "cwe": "CWE-79",
+    "explanation": "Unsanitized user input shown back to browser. Can trigger malicious scripts."
+  }
+}
